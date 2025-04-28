@@ -28,15 +28,25 @@ namespace CarRent
             _context = new CarRentDbContext(optionsBuilder.Options);
 
             // Завантаження даних при запуску
-            LoadUsers();
+            LoadCars();
         }
 
-        private void LoadUsers()
+        private void LoadCars()
         {
-            // Завантажуємо користувачів із бази даних
-            var users = _context.Users.ToList();
-            // Прив’язуємо дані до DataGrid
-            UsersDataGrid.ItemsSource = users;
+            // Завантажуємо машини із бази даних
+            var cars = _context.Cars.ToList();
+            // Прив’язуємо дані до ListBox
+            CarsListBox.ItemsSource = cars;
+        }
+
+        private void CarsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CarsListBox.SelectedItem is Car selectedCar)
+            {
+                // Відкриваємо нове вікно з характеристиками вибраної машини
+                var detailsWindow = new CarDetailsWindow(selectedCar);
+                detailsWindow.ShowDialog();
+            }
         }
     }
 

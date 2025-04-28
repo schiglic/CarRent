@@ -5,17 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarRent"
         mc:Ignorable="d"
-        Title="Car Rent - Users" Height="450" Width="800">
+        Title="Car Rent - Available Cars" Height="450" Width="800">
     <Grid>
-        <DataGrid x:Name="UsersDataGrid" AutoGenerateColumns="False" Margin="10" IsReadOnly="True" 
-                  GridLinesVisibility="All" HeadersVisibility="Column" RowHeight="30">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="150"/>
-                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="150"/>
-                <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="150"/>
-                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <ListBox x:Name="CarsListBox" Margin="10" SelectionChanged="CarsListBox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Width="200" Height="150">
+                        <StackPanel>
+                            <Image Source="{Binding ImagePath}" Width="180" Height="100" Stretch="Uniform"/>
+                            <TextBlock Text="{Binding Brand}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="{Binding Model}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Window>
