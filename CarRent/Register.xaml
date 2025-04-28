@@ -1,0 +1,41 @@
+﻿<Window x:Class="CarRent.Register"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarRent"
+        mc:Ignorable="d"
+        Title="Car Rent - Login/Register" Height="400" Width="400">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Панель для входу -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <TextBlock Text="Login" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Username:" Margin="0,0,0,5"/>
+            <TextBox x:Name="LoginUsernameTextBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Password:" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="LoginPasswordBox" Margin="0,0,0,10"/>
+            <Button x:Name="LoginButton" Content="Login" Click="LoginButton_Click" Width="100" Height="30"/>
+        </StackPanel>
+
+        <!-- Панель для реєстрації -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock Text="Register" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="First Name:" Margin="0,0,0,5"/>
+            <TextBox x:Name="RegisterFirstNameTextBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Last Name:" Margin="0,0,0,5"/>
+            <TextBox x:Name="RegisterLastNameTextBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Username:" Margin="0,0,0,5"/>
+            <TextBox x:Name="RegisterUsernameTextBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Password:" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="RegisterPasswordBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Phone:" Margin="0,0,0,5"/>
+            <TextBox x:Name="RegisterPhoneTextBox" Margin="0,0,0,10"/>
+            <Button x:Name="RegisterButton" Content="Register" Click="RegisterButton_Click" Width="100" Height="30"/>
+        </StackPanel>
+    </Grid>
+</Window>
