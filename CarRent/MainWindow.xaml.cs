@@ -1,0 +1,160 @@
+﻿using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
+
+namespace CarRent
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private readonly CarRentDbContext _context;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            // Налаштування підключення до бази даних
+            var optionsBuilder = new DbContextOptionsBuilder<CarRentDbContext>();
+            optionsBuilder.UseNpgsql("Host=ep-broad-fire-a95akvsv-pooler.gwc.azure.neon.tech;Database=CarRentDB;Username=owner;Password=npg_MsWmoTr40JNf;SSL Mode=Require");
+            _context = new CarRentDbContext(optionsBuilder.Options);
+
+            // Завантаження даних при запуску
+            LoadUsers();
+        }
+
+        private void LoadUsers()
+        {
+            // Завантажуємо користувачів із бази даних
+            var users = _context.Users.ToList();
+            // Прив’язуємо дані до DataGrid
+            UsersDataGrid.ItemsSource = users;
+        }
+    }
+
+    // Клас контексту бази даних
+    public class CarRentDbContext : DbContext
+    {
+        public CarRentDbContext(DbContextOptions<CarRentDbContext> options) : base(options) { }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Налаштування назв таблиць (у нижньому регістрі, як у базі)
+            modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Car>().ToTable("cars");
+            modelBuilder.Entity<Booking>().ToTable("bookings");
+            modelBuilder.Entity<Payment>().ToTable("payments");
+
+            // Налаштування назв колонок (у нижньому регістрі, як у базі)
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.FirstName).HasColumnName("first_name");
+                entity.Property(e => e.LastName).HasColumnName("last_name");
+                entity.Property(e => e.Login).HasColumnName("login");
+                entity.Property(e => e.Password).HasColumnName("password");
+                entity.Property(e => e.Phone).HasColumnName("phone");
+            });
+
+            modelBuilder.Entity<Car>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Brand).HasColumnName("brand");
+                entity.Property(e => e.Model).HasColumnName("model");
+                entity.Property(e => e.Year).HasColumnName("year");
+                entity.Property(e => e.LicensePlate).HasColumnName("license_plate");
+                entity.Property(e => e.Type).HasColumnName("type");
+                entity.Property(e => e.Status).HasColumnName("status");
+                entity.Property(e => e.PricePerDay).HasColumnName("price_per_day");
+                entity.Property(e => e.ImagePath).HasColumnName("image_path");
+            });
+
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.CarId).HasColumnName("car_id");
+                entity.Property(e => e.StartDate).HasColumnName("start_date");
+                entity.Property(e => e.EndDate).HasColumnName("end_date");
+                entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+                entity.Property(e => e.Status).HasColumnName("status");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.BookingId).HasColumnName("booking_id");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.Amount).HasColumnName("amount");
+                entity.Property(e => e.PaymentMethod).HasColumnName("payment_method");
+                entity.Property(e => e.Status).HasColumnName("status");
+                entity.Property(e => e.PaymentDate).HasColumnName("payment_date");
+                entity.Property(e => e.TransactionId).HasColumnName("transaction_id");
+            });
+        }
+    }
+
+    // Моделі для таблиць
+    public class User
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Phone { get; set; }
+    }
+
+    public class Car
+    {
+        public int Id { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
+        public int Year { get; set; }
+        public string LicensePlate { get; set; }
+        public string Type { get; set; }
+        public string Status { get; set; }
+        public decimal PricePerDay { get; set; }
+        public string ImagePath { get; set; }
+    }
+
+    public class Booking
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public int CarId { get; set; }
+        public Car Car { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class Payment
+    {
+        public int Id { get; set; }
+        public int BookingId { get; set; }
+        public Booking Booking { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public decimal Amount { get; set; }
+        public string PaymentMethod { get; set; }
+        public string Status { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public string TransactionId { get; set; }
+    }
+}
