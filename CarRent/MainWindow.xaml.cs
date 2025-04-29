@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace CarRent
 {
@@ -41,7 +41,38 @@ namespace CarRent
             if (_currentUser != null)
             {
                 UserNameTextBlock.Text = $"{_currentUser.FirstName} {_currentUser.LastName}";
-                UserAvatarImage.Source = _currentUser.AvatarPath != null ? new BitmapImage(new Uri(System.IO.Path.Combine(Directory.GetCurrentDirectory(), _currentUser.AvatarPath))) : null;
+                if (!string.IsNullOrEmpty(_currentUser.AvatarPath))
+                {
+                    // Отримуємо шлях до кореня проєкту (CarRent)
+                    string projectRoot = Directory.GetCurrentDirectory();
+                    while (System.IO.Path.GetFileName(projectRoot) != "CarRent" && !string.IsNullOrEmpty(projectRoot))
+                    {
+                        projectRoot = Directory.GetParent(projectRoot)?.FullName;
+                    }
+                    if (string.IsNullOrEmpty(projectRoot))
+                    {
+                        MessageBox.Show("Could not find project root directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Формуємо повний шлях до аватарки (CarRent/avatars/username.jpg)
+                    string avatarFullPath = System.IO.Path.Combine(projectRoot, _currentUser.AvatarPath);
+                    if (File.Exists(avatarFullPath))
+                    {
+                        try
+                        {
+                            UserAvatarImage.Source = new BitmapImage(new Uri(avatarFullPath));
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Failed to load avatar image.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Avatar image not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
             }
             else
             {

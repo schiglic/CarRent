@@ -85,18 +85,51 @@ namespace CarRent
             string avatarPath = null;
             if (!string.IsNullOrEmpty(_selectedAvatarPath))
             {
-                string avatarsDir = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "avatars");
-                if (!Directory.Exists(avatarsDir))
+                try
                 {
-                    Directory.CreateDirectory(avatarsDir);
+                    // Отримуємо шлях до кореня проєкту (CarRent)
+                    string projectRoot = Directory.GetCurrentDirectory();
+                    while (Path.GetFileName(projectRoot) != "CarRent" && !string.IsNullOrEmpty(projectRoot))
+                    {
+                        projectRoot = Directory.GetParent(projectRoot)?.FullName;
+                    }
+                    if (string.IsNullOrEmpty(projectRoot))
+                    {
+                        MessageBox.Show("Could not find project root directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Формуємо шлях до папки avatars у корені проєкту (CarRent/avatars)
+                    string avatarsDir = Path.Combine(projectRoot, "avatars");
+                    if (!Directory.Exists(avatarsDir))
+                    {
+                        Directory.CreateDirectory(avatarsDir);
+                    }
+
+                    // Отримуємо розширення файлу
+                    string extension = Path.GetExtension(_selectedAvatarPath);
+                    // Формуємо нову назву файлу (логін користувача + розширення)
+                    string newAvatarFileName = $"{username}{extension}";
+                    // Відносний шлях, який зберігатимемо в базі даних
+                    avatarPath = $"avatars/{newAvatarFileName}";
+                    // Повний шлях для копіювання файлу (CarRent/avatars/username.jpg)
+                    string destinationPath = Path.Combine(avatarsDir, newAvatarFileName);
+
+                    // Копіюємо файл у папку avatars
+                    File.Copy(_selectedAvatarPath, destinationPath, true);
+
+                    // Перевіряємо, чи файл дійсно скопійовано
+                    if (!File.Exists(destinationPath))
+                    {
+                        MessageBox.Show("Failed to save the avatar image.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                 }
-
-                string extension = System.IO.Path.GetExtension(_selectedAvatarPath);
-                string newAvatarFileName = $"{username}{extension}";
-                avatarPath = System.IO.Path.Combine("avatars", newAvatarFileName);
-                string destinationPath = System.IO.Path.Combine(avatarsDir, newAvatarFileName);
-
-                File.Copy(_selectedAvatarPath, destinationPath, true);
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving avatar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
 
             // Створення нового користувача
@@ -107,7 +140,7 @@ namespace CarRent
                 Login = username,
                 Password = password, // У реальному додатку пароль потрібно хешувати!
                 Phone = phone,
-                AvatarPath = avatarPath // Зберігаємо шлях до аватарки
+                AvatarPath = avatarPath // Зберігаємо відносний шлях до аватарки
             };
 
             _context.Users.Add(newUser);
