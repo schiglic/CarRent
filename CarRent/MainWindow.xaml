@@ -14,7 +14,7 @@
 
         <!-- Панель користувача -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <Image x:Name="UserAvatarImage" Source="{Binding AvatarPath}" Width="50" Height="50" Stretch="Uniform" Margin="0,0,10,0"/>
+            <Image x:Name="UserAvatarImage" Source="{Binding AvatarPath}" Width="50" Height="50" Stretch="Uniform" Margin="0,0,10,0" MouseDown="UserAvatarImage_MouseDown"/>
             <TextBlock x:Name="UserNameTextBlock" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
         </StackPanel>
 

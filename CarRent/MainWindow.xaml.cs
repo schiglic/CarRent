@@ -13,9 +13,6 @@ using System.IO;
 
 namespace CarRent
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly CarRentDbContext _context;
@@ -95,6 +92,20 @@ namespace CarRent
                 // Відкриваємо нове вікно з характеристиками вибраної машини
                 var detailsWindow = new CarDetailsWindow(selectedCar);
                 detailsWindow.ShowDialog();
+            }
+        }
+
+        private void UserAvatarImage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_currentUser != null)
+            {
+                // Відкриваємо вікно UserInfo із передачею UserId
+                var userInfoWindow = new UserInfo(_currentUser.Id);
+                userInfoWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No user is logged in.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
