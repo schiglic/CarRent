@@ -2,12 +2,15 @@
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.IO;
 
 namespace CarRent
 {
     public partial class Register : Window
     {
         private readonly CarRentDbContext _context;
+        private string _selectedAvatarPath; // Для зберігання шляху до вибраного файлу аватарки
 
         public Register()
         {
@@ -29,13 +32,28 @@ namespace CarRent
             if (user != null)
             {
                 // Успішний вхід, відкриваємо MainWindow
-                var mainWindow = new MainWindow();
+                var mainWindow = new MainWindow(user);
                 mainWindow.Show();
                 Close(); // Закриваємо вікно входу/реєстрації
             }
             else
             {
                 MessageBox.Show("Invalid username or password.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UploadAvatarButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.jpg, *.png)|*.jpg;*.png|All files (*.*)|*.*",
+                Title = "Select an avatar image"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _selectedAvatarPath = openFileDialog.FileName;
+                AvatarPathTextBox.Text = System.IO.Path.GetFileName(_selectedAvatarPath);
             }
         }
 
@@ -63,6 +81,24 @@ namespace CarRent
                 return;
             }
 
+            // Обробка аватарки
+            string avatarPath = null;
+            if (!string.IsNullOrEmpty(_selectedAvatarPath))
+            {
+                string avatarsDir = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "avatars");
+                if (!Directory.Exists(avatarsDir))
+                {
+                    Directory.CreateDirectory(avatarsDir);
+                }
+
+                string extension = System.IO.Path.GetExtension(_selectedAvatarPath);
+                string newAvatarFileName = $"{username}{extension}";
+                avatarPath = System.IO.Path.Combine("avatars", newAvatarFileName);
+                string destinationPath = System.IO.Path.Combine(avatarsDir, newAvatarFileName);
+
+                File.Copy(_selectedAvatarPath, destinationPath, true);
+            }
+
             // Створення нового користувача
             var newUser = new User
             {
@@ -70,7 +106,8 @@ namespace CarRent
                 LastName = lastName,
                 Login = username,
                 Password = password, // У реальному додатку пароль потрібно хешувати!
-                Phone = phone
+                Phone = phone,
+                AvatarPath = avatarPath // Зберігаємо шлях до аватарки
             };
 
             _context.Users.Add(newUser);
@@ -84,6 +121,8 @@ namespace CarRent
             RegisterUsernameTextBox.Text = "";
             RegisterPasswordBox.Password = "";
             RegisterPhoneTextBox.Text = "";
+            AvatarPathTextBox.Text = "";
+            _selectedAvatarPath = null;
         }
     }
 }

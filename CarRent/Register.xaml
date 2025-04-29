@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarRent"
         mc:Ignorable="d"
-        Title="Car Rent - Login/Register" Height="400" Width="400">
+        Title="Car Rent - Login/Register" Height="450" Width="400">
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -35,6 +35,11 @@
             <PasswordBox x:Name="RegisterPasswordBox" Margin="0,0,0,10"/>
             <TextBlock Text="Phone:" Margin="0,0,0,5"/>
             <TextBox x:Name="RegisterPhoneTextBox" Margin="0,0,0,10"/>
+            <TextBlock Text="Avatar:" Margin="0,0,0,5"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox x:Name="AvatarPathTextBox" Width="120" IsReadOnly="True" Margin="0,0,5,0"/>
+                <Button x:Name="UploadAvatarButton" Content="Upload" Click="UploadAvatarButton_Click" Width="60"/>
+            </StackPanel>
             <Button x:Name="RegisterButton" Content="Register" Click="RegisterButton_Click" Width="100" Height="30"/>
         </StackPanel>
     </Grid>

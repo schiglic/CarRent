@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,8 +19,9 @@ namespace CarRent
     public partial class MainWindow : Window
     {
         private readonly CarRentDbContext _context;
+        private readonly User _currentUser;
 
-        public MainWindow()
+        public MainWindow(User currentUser = null)
         {
             InitializeComponent();
             // Налаштування підключення до бази даних
@@ -27,8 +29,24 @@ namespace CarRent
             optionsBuilder.UseNpgsql("Host=ep-broad-fire-a95akvsv-pooler.gwc.azure.neon.tech;Database=CarRentDB;Username=owner;Password=npg_MsWmoTr40JNf;SSL Mode=Require");
             _context = new CarRentDbContext(optionsBuilder.Options);
 
+            _currentUser = currentUser;
+            DisplayCurrentUser();
+
             // Завантаження даних при запуску
             LoadCars();
+        }
+
+        private void DisplayCurrentUser()
+        {
+            if (_currentUser != null)
+            {
+                UserNameTextBlock.Text = $"{_currentUser.FirstName} {_currentUser.LastName}";
+                UserAvatarImage.Source = _currentUser.AvatarPath != null ? new BitmapImage(new Uri(System.IO.Path.Combine(Directory.GetCurrentDirectory(), _currentUser.AvatarPath))) : null;
+            }
+            else
+            {
+                UserNameTextBlock.Text = "Guest";
+            }
         }
 
         private void LoadCars()
@@ -77,6 +95,7 @@ namespace CarRent
                 entity.Property(e => e.Login).HasColumnName("login");
                 entity.Property(e => e.Password).HasColumnName("password");
                 entity.Property(e => e.Phone).HasColumnName("phone");
+                entity.Property(e => e.AvatarPath).HasColumnName("avatar_path");
             });
 
             modelBuilder.Entity<Car>(entity =>
@@ -126,6 +145,7 @@ namespace CarRent
         public string Login { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
+        public string AvatarPath { get; set; }
     }
 
     public class Car
