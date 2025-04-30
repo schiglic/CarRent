@@ -5,46 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarRent"
         mc:Ignorable="d"
-        Title="Car Details" Height="400" Width="500">
-    <Grid Margin="10">
+        Title="Car Details" Height="400" Width="600">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Brand:" Grid.Row="0" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding Brand}" Grid.Row="0" Grid.Column="1" Margin="5"/>
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="{Binding Brand}" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
-        <TextBlock Text="Model:" Grid.Row="1" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding Model}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        <!-- Деталі машини -->
+        <StackPanel Grid.Row="1">
+            <Image Source="{Binding ImagePath}" Width="300" Height="150" Stretch="Uniform" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding Model, StringFormat=Model: {0}}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding Year, StringFormat=Year: {0}}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding LicensePlate, StringFormat=License Plate: {0}}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding Type, StringFormat=Type: {0}}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding Status, StringFormat=Status: {0}}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding PricePerDay, StringFormat=Price per Day: {0} USD}" Margin="0,0,0,10"/>
+        </StackPanel>
 
-        <TextBlock Text="Year:" Grid.Row="2" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding Year}" Grid.Row="2" Grid.Column="1" Margin="5"/>
-
-        <TextBlock Text="License Plate:" Grid.Row="3" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding LicensePlate}" Grid.Row="3" Grid.Column="1" Margin="5"/>
-
-        <TextBlock Text="Type:" Grid.Row="4" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding Type}" Grid.Row="4" Grid.Column="1" Margin="5"/>
-
-        <TextBlock Text="Status:" Grid.Row="5" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding Status}" Grid.Row="5" Grid.Column="1" Margin="5"/>
-
-        <TextBlock Text="Price per Day:" Grid.Row="6" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <TextBlock Text="{Binding PricePerDay}" Grid.Row="6" Grid.Column="1" Margin="5"/>
-
-        <TextBlock Text="Image:" Grid.Row="7" Grid.Column="0" FontWeight="Bold" Margin="5"/>
-        <Image Source="{Binding ImagePath}" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Width="200" Height="100" Stretch="Uniform" Margin="5"/>
+        <!-- Кнопка оплати -->
+        <Button Grid.Row="2" x:Name="PayButton" Content="Pay" Click="PayButton_Click" Width="100" Height="30" HorizontalAlignment="Right"/>
     </Grid>
 </Window>
