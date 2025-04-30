@@ -157,5 +157,19 @@ namespace CarRent
             AvatarPathTextBox.Text = "";
             _selectedAvatarPath = null;
         }
+
+        private void GoToLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterPanel.Visibility = Visibility.Collapsed;
+            LoginPanel.Visibility = Visibility.Visible;
+            Title = "Car Rent - Login";
+        }
+
+        private void GoToRegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginPanel.Visibility = Visibility.Collapsed;
+            RegisterPanel.Visibility = Visibility.Visible;
+            Title = "Car Rent - Register";
+        }
     }
 }

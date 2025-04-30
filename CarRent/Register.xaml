@@ -5,25 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarRent"
         mc:Ignorable="d"
-        Title="Car Rent - Login/Register" Height="450" Width="400">
+        Title="Car Rent - Register" Height="530" Width="400">
     <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
         <!-- Панель для входу -->
-        <StackPanel Grid.Column="0" Margin="10">
+        <StackPanel x:Name="LoginPanel" Visibility="Collapsed" Margin="10">
             <TextBlock Text="Login" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="Username:" Margin="0,0,0,5"/>
             <TextBox x:Name="LoginUsernameTextBox" Margin="0,0,0,10"/>
             <TextBlock Text="Password:" Margin="0,0,0,5"/>
             <PasswordBox x:Name="LoginPasswordBox" Margin="0,0,0,10"/>
-            <Button x:Name="LoginButton" Content="Login" Click="LoginButton_Click" Width="100" Height="30"/>
+            <Button x:Name="LoginButton" Content="Login" Click="LoginButton_Click" Width="100" Height="30" Margin="0,0,0,20"/>
+            <Button x:Name="GoToRegisterButton" Content="Need to register? Sign up here" Click="GoToRegisterButton_Click" Width="200" Height="30" Foreground="Blue" Background="Transparent" BorderThickness="0"/>
         </StackPanel>
 
         <!-- Панель для реєстрації -->
-        <StackPanel Grid.Column="1" Margin="10">
+        <StackPanel x:Name="RegisterPanel" Visibility="Visible" Margin="10">
             <TextBlock Text="Register" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="First Name:" Margin="0,0,0,5"/>
             <TextBox x:Name="RegisterFirstNameTextBox" Margin="0,0,0,10"/>
@@ -40,7 +36,8 @@
                 <TextBox x:Name="AvatarPathTextBox" Width="120" IsReadOnly="True" Margin="0,0,5,0"/>
                 <Button x:Name="UploadAvatarButton" Content="Upload" Click="UploadAvatarButton_Click" Width="60"/>
             </StackPanel>
-            <Button x:Name="RegisterButton" Content="Register" Click="RegisterButton_Click" Width="100" Height="30"/>
+            <Button x:Name="RegisterButton" Content="Register" Click="RegisterButton_Click" Width="100" Height="30" Margin="0,0,0,20"/>
+            <Button x:Name="GoToLoginButton" Content="Already have an account? Sign in here" Click="GoToLoginButton_Click" Width="224" Height="30" Foreground="Blue" Background="Transparent" BorderThickness="0"/>
         </StackPanel>
     </Grid>
 </Window>
