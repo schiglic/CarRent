@@ -13,10 +13,21 @@
         </Grid.RowDefinitions>
 
         <!-- Панель користувача -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <Image x:Name="UserAvatarImage" Source="{Binding AvatarPath}" Width="50" Height="50" Stretch="Uniform" Margin="0,0,10,0" MouseDown="UserAvatarImage_MouseDown"/>
-            <TextBlock x:Name="UserNameTextBlock" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Ліва частина: аватарка та ім'я -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Image x:Name="UserAvatarImage" Source="{Binding AvatarPath}" Width="50" Height="50" Stretch="Uniform" Margin="0,0,10,0" MouseDown="UserAvatarImage_MouseDown"/>
+                <TextBlock x:Name="UserNameTextBlock" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Права частина: кнопка Logout -->
+            <Button x:Name="LogoutButton" Grid.Column="1" Content="Logout" Click="LogoutButton_Click" Width="80" Height="30" HorizontalAlignment="Right" Visibility="Collapsed"/>
+        </Grid>
 
         <!-- Список машин -->
         <ListBox x:Name="CarsListBox" Grid.Row="1" Margin="10" SelectionChanged="CarsListBox_SelectionChanged">

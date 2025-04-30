@@ -13,9 +13,6 @@ using System.IO;
 
 namespace CarRent
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly CarRentDbContext _context;
@@ -41,6 +38,7 @@ namespace CarRent
             if (_currentUser != null)
             {
                 UserNameTextBlock.Text = $"{_currentUser.FirstName} {_currentUser.LastName}";
+                LogoutButton.Visibility = Visibility.Visible; // Показуємо кнопку для залогінених користувачів
                 if (!string.IsNullOrEmpty(_currentUser.AvatarPath))
                 {
                     // Отримуємо шлях до кореня проєкту (CarRent)
@@ -77,22 +75,31 @@ namespace CarRent
             else
             {
                 UserNameTextBlock.Text = "Guest";
+                LogoutButton.Visibility = Visibility.Collapsed; // Приховуємо кнопку для гостей
             }
         }
 
-        // Обробник події MouseDown для аватарки
         private void UserAvatarImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (_currentUser != null)
             {
-                // Відкриваємо вікно UserInfo, передаючи ID користувача
+                // Відкриваємо вікно UserInfo із передачею UserId
                 var userInfoWindow = new UserInfo(_currentUser.Id);
                 userInfoWindow.ShowDialog();
             }
             else
             {
-                MessageBox.Show("No user logged in.", "User Profile", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No user is logged in.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Відкриваємо вікно Register
+            var registerWindow = new Register();
+            registerWindow.Show();
+            // Закриваємо поточне вікно MainWindow
+            Close();
         }
 
         public void LoadCars()
